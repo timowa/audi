@@ -2,7 +2,6 @@
 
 namespace App\Jobs\Generations;
 
-use App\Models\CarModel;
 use App\Models\Generation;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -29,6 +28,7 @@ class ParseGenerationsFromHtml implements ShouldQueue
      */
     public function handle()
     {
+        Generation::truncate();
         $url = $this->url;
         $html = Http::get($url);
         $html =  substr($html->body(), strpos($html->body(),'<body'));
@@ -47,7 +47,8 @@ class ParseGenerationsFromHtml implements ShouldQueue
             $region=$children->item(0)->attributes->getNamedItem('id')->value;
             $generations = $this->returnOnlyDivChildren($children->item(1));
             foreach ($generations as $generation){
-                $link = $generation->getElementsByTagName('a')->item(0)->getAttribute('href');
+                $link = $this->url;
+                $link .= $generation->getElementsByTagName('a')->item(0)->getAttribute('href');
                 $img = $generation->getElementsByTagName('img')->item(0)->getAttribute('data-src');
                 $span = preg_split('/\r\n|\n|\r/',$generation->getElementsByTagName('span')->item(0)->nodeValue);
                 $name = $span[0];
@@ -56,9 +57,15 @@ class ParseGenerationsFromHtml implements ShouldQueue
                 }
                 $period = $span[1];
                 $generationNumber = $this->returnOnlyDivChildren($generation->getElementsByTagName('a')->item(0))->item(2)->nodeValue[0];
-                Generation::updateOrCreate(
-                    ['name'=>$name,'model_id'=>$this->id,'period'=>$period,'generation'=>$generationNumber,'market'=>$region],
-                    ['link'=>$url.=$link,'pictureUrl'=>$img]
+
+                Generation::create(
+                    ['name'=>$name,
+                        'model_id'=>$this->id,
+                        'period'=>$period,
+                        'generation'=>$generationNumber,
+                        'market'=>$region,
+                        'link'=>$link,
+                        'pictureUrl'=>$img]
                 );
             }
         }

@@ -4,9 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\Generations\ParseGenerationsFromHtml;
 use App\Models\CarModel;
-use App\Models\Generation;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
 
 class parseGenerations extends Command
 {
@@ -29,10 +27,10 @@ class parseGenerations extends Command
      */
     public function handle()
     {
-        $model = CarModel::find(356);
-//        foreach ($models as $model){
+        $models = CarModel::all();
+        foreach ($models as $model){
             dispatch(new ParseGenerationsFromHtml($model->id,$model->url));
-//        }
+        }
 
     }
 
