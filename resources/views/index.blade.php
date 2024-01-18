@@ -21,6 +21,7 @@
                         <p><a href="{{$generation->link}}">{{$generation->name}}</a></p>
                         <p>{{$generation->period}}</p>
                         <p>{{$generation->generation}} поколение</p>
+                        <p>{{$generation->market}} </p>
                     </div>
                 @endforeach
                 </div>

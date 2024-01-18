@@ -16,13 +16,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [\App\Http\Controllers\Controller::class,'index']);
 
-Route::get('/audi',function(){
-    Artisan::call('audi:generations');
-});
-Route::get('/clear', function () {
-    Artisan::call('cache:clear');
-    Artisan::call('config:cache');
-    Artisan::call('view:clear');
-    Artisan::call('route:clear');
-    return "Кэш очищен.";
-});
+//Route::get('/audi',function(){
+//    Artisan::call('audi:generations');
+//});
+//Route::get('/clear', function () {
+//    Artisan::call('cache:clear');
+//    Artisan::call('config:cache');
+//    Artisan::call('view:clear');
+//    Artisan::call('route:clear');
+//    return "Кэш очищен.";
+//});

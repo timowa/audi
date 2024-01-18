@@ -28,7 +28,6 @@ class ParseGenerationsFromHtml implements ShouldQueue
      */
     public function handle()
     {
-        Generation::truncate();
         $url = $this->url;
         $html = Http::get($url);
         $html =  substr($html->body(), strpos($html->body(),'<body'));
